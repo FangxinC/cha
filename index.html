@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生日快乐！</title>
+    <style>
+        /* 全局粉色少女心样式 */
+        :root {
+            --main-pink: #ffafcc;
+            --light-pink: #ffc8dd;
+            --dark-pink: #b5179e;
+            --bg-color: #fff0f3;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: #4a4a4a;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* 关卡1：登录验证界面 */
+        #login-page {
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 175, 204, 0.3);
+            max-width: 400px;
+            width: 90%;
+            transition: all 0.8s ease;
+        }
+
+        h1 {
+            color: var(--dark-pink);
+            margin-bottom: 10px;
+        }
+
+        .sub-title {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        /* 优化后的输入框：加大加粗，更有仪式感 */
+        input[type="text"] {
+            border: 2px solid var(--light-pink);
+            padding: 12px 15px;
+            border-radius: 10px;
+            outline: none;
+            font-size: 1.2rem;
+            color: #555;
+            width: 80%;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        input[type="text"]::placeholder {
+            color: #ccc;
+            font-size: 1rem;
+            letter-spacing: 0px;
+        }
+
+        button {
+            background-color: var(--main-pink);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            box-shadow: 0 5px 15px rgba(255, 175, 204, 0.4);
+        }
+
+        button:hover {
+            background-color: #ff8fab;
+            transform: translateY(-2px);
+        }
+
+        /* 关卡2：主内容界面 */
+        #content-page {
+            display: none;
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
+            text-align: center;
+            animation: fadeIn 1.5s ease forwards;
+        }
+
+        /* 简易纯CSS生日蛋糕 */
+        .cake-container {
+            position: relative;
+            height: 200px;
+            width: 200px;
+            margin: 40px auto;
+        }
+
+        .cake {
+            position: absolute;
+            bottom: 0;
+            width: 150px;
+            height: 60px;
+            background: #f1c40f;
+            border-radius: 10px 10px 0 0;
+            left: 25px;
+            box-shadow: 0 5px 0 #d4ac0d;
+        }
+        .cake::before {
+            content: '';
+            position: absolute;
+            top: -40px;
+            left: 10px;
+            width: 130px;
+            height: 40px;
+            background: var(--light-pink);
+            border-radius: 10px 10px 0 0;
+        }
+
+        .candle {
+            position: absolute;
+            bottom: 100px;
+            left: 95px;
+            width: 10px;
+            height: 40px;
+            background: #e74c3c;
+        }
+
+        .flame {
+            position: absolute;
+            top: -15px;
+            left: -2px;
+            width: 14px;
+            height: 14px;
+            background: #f39c12;
+            border-radius: 50% 50% 20% 50%;
+            transform: rotate(-45deg);
+            animation: flicker 0.5s infinite alternate;
+        }
+
+        /* 照片墙样式 */
+        .photo-wall {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            margin: 50px 0;
+        }
+
+        .photo-card {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transform: rotate(var(--r));
+            transition: transform 0.3s;
+        }
+
+        .photo-card:hover {
+            transform: rotate(0deg) scale(1.05);
+            z-index: 10;
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 4px;
+            background-color: #eee;
+        }
+
+        .photo-card p {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: #777;
+            font-style: italic;
+        }
+
+        /* 祝福语板块 */
+        .wishes {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(255,175,204,0.2);
+            margin-top: 30px;
+            line-height: 1.8;
+        }
+
+        .wish-text {
+            font-size: 1.1rem;
+            color: #555;
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes flicker {
+            0% { transform: rotate(-45deg) scale(1); }
+            100% { transform: rotate(-45deg) scale(1.1); opacity: 0.9; }
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="bgm" loop>
+        <source src="bgm.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="login-page">
+        <h1>茶茶生日快乐</h1>
+        <p class="sub-title">输入 4 位生日数字解锁专属惊喜</p>
+        
+        <div class="input-group">
+            <input type="text" id="birthday-input" maxlength="4" placeholder="MMDD">
+        </div>
+        <button onclick="checkBirthday()">解锁惊喜 🎁</button>
+    </div>
+
+    <div id="content-page">
+        <h1>🎉 生日快乐！🎉</h1>
+        
+        <div class="cake-container">
+            <div class="candle"><div class="flame"></div></div>
+            <div class="cake"></div>
+        </div>
+
+        <div class="photo-wall">
+            <div class="photo-card" style="--r: -3deg;">
+                <img src="1.jpg" alt="照片1">
+                <p>巴黎之旅✈</p>
+            </div>
+            <div class="photo-card" style="--r: 4deg;">
+                <img src="2.jpg" alt="照片2">
+                <p>巴黎之旅✈</p>
+            </div>
+            <div class="photo-card" style="--r: -2deg;">
+                <img src="3.jpg" alt="照片3">
+                <p>巴黎之旅</p>
+            </div>
+            <div class="photo-card" style="--r: 5deg;">
+                <img src="4.jpg" alt="照片4">
+                <p>永远好朋友 </p>
+            </div>
+            <div class="photo-card" style="--r: -2deg;">
+                <img src="5.jpg" alt="照片3">
+                <p>永远好朋友 </p>
+            </div>
+            <div class="photo-card" style="--r: 5deg;">
+                <img src="6.jpg" alt="照片4">
+                <p>🐻🐇</p>
+            </div>
+        </div>
+
+        <div class="wishes">
+            <h3>To: 茶茶</h3>
+            <br>
+            <p class="wish-text">祝21岁生日快乐！！！新的一年也要天天快乐</p>
+            <p class="wish-text">—— 🐻</p>
+        </div>
+    </div>
+
+    <script>
+        function checkBirthday() {
+            const inputVal = document.getElementById('birthday-input').value.trim();
+            const bgm = document.getElementById('bgm');
+            
+            if (!inputVal) {
+                alert("请先输入你的生日数字哦！🎂");
+                return;
+            }
+
+            // 💖 动手改：在这里设置TA的生日（4位数字格式）
+            const targetBirthday = '0611'; 
+
+            if (inputVal === targetBirthday) {
+                // 1. 播放背景音乐
+                bgm.play().catch(err => {
+                    console.log("音乐播放被浏览器拦截，但我们将继续跳转", err);
+                });
+
+                // 2. 切换界面
+                document.getElementById('login-page').style.display = 'none';
+                document.getElementById('content-page').style.display = 'block';
+                document.body.style.alignItems = 'flex-start';
+                document.body.style.padding = '40px 0';
+            } else {
+                alert("惹？生日数字不正确哦，再想想？🤨");
+            }
+        }
+    </script>
+</body>
+</html>
